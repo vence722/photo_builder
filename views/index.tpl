@@ -46,7 +46,7 @@
 		function template1() {
 			$("#loadingModal").modal("show");
 			waitingDialog.show();
-			$.post("/proess", {tempId: "1"}, function (resp) {
+			$.post("/proess", {tmplID: "1"}, function (resp) {
 				var photo = resp;
 				var img_elem = $("<img src=\"data:image/jpeg;base64," + photo.DataBase64 + "\" style=\"max-height:500px\"/>");
 				$("#result_div").html(img_elem);
@@ -58,7 +58,7 @@
 		function template2() {
 			$("#loadingModal").modal("show");
 			waitingDialog.show();
-			$.post("/proess", {tempId: "2"}, function (resp) {
+			$.post("/proess", {tmplID: "2"}, function (resp) {
 				var photo = resp;
 				var img_elem = $("<img src=\"data:image/jpeg;base64," + photo.DataBase64 + "\" style=\"max-height:500px\"/>");
 				$("#result_div").html(img_elem);

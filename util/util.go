@@ -5,7 +5,6 @@ import (
 	"image/draw"
 	"image/jpeg"
 	"os"
-	"photo_builder/model"
 
 	"github.com/nfnt/resize"
 )
@@ -32,22 +31,8 @@ func WriteImage(img draw.Image, path string) error {
 	return jpeg.Encode(tf, img, &jpeg.Options{Quality: jpeg.DefaultQuality})
 }
 
-func PutPhoto(base draw.Image, src draw.Image, offsetX int, offsetY int, photoFilter model.PhotoFilter) draw.Image {
-	for i := 0; i < src.Bounds().Dx(); i++ {
-		for j := 0; j < src.Bounds().Dy(); j++ {
-			if photoFilter == nil || photoFilter.Filter(i, j) {
-				x := offsetX + i
-				y := offsetY + j
-
-				base.Set(x, y, src.At(i, j))
-			}
-		}
-	}
-	return base
-}
-
-func Resize(img draw.Image, width uint, height uint) draw.Image {
-	resized := resize.Resize(width, height, img, resize.Lanczos3)
+func Resize(img draw.Image, width int, height int) draw.Image {
+	resized := resize.Resize(uint(width), uint(height), img, resize.Lanczos3)
 	return ToDrawableImage(resized)
 }
 

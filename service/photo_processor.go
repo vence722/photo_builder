@@ -6,18 +6,19 @@ import (
 	"image/draw"
 	"image/jpeg"
 	"photo_builder/model"
+	"photo_builder/model/template"
 	"photo_builder/util"
 )
 
-type PhotoProcessor struct {
+type photoProcessor struct {
 	rootPath string
 }
 
-func NewPhotoProcessor(rootPath string) *PhotoProcessor {
-	return &PhotoProcessor{rootPath: rootPath}
+func newPhotoProcessor(rootPath string) *photoProcessor {
+	return &photoProcessor{rootPath: rootPath}
 }
 
-func (this *PhotoProcessor) Process(photoBatch []*model.Photo, template Template) (*model.Photo, error) {
+func (this *photoProcessor) Process(photoBatch []*model.Photo, tmpl template.Template) (*model.Photo, error) {
 	var photos []draw.Image
 	for _, photoRaw := range photoBatch {
 		data, err := base64.RawStdEncoding.DecodeString(photoRaw.DataBase64)
@@ -31,7 +32,7 @@ func (this *PhotoProcessor) Process(photoBatch []*model.Photo, template Template
 		photo := util.ToDrawableImage(img)
 		photos = append(photos, photo)
 	}
-	target, err := template.ProcessPhoto(photos)
+	target, err := tmpl.ProcessPhoto(photos)
 	if err != nil {
 		return nil, err
 	}

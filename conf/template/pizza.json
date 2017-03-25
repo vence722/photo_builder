@@ -1,0 +1,30 @@
+{
+	"Base": {
+		"ResizeW": 1000,
+		"ResizeH": 0
+	},
+	"PizzaPieces": [
+		{
+			"ResizeW": 500,
+			"ResizeH": 0,
+			"PutX": 150,
+			"PutY": 20,
+			"Alpha": 2.5943951023931954, 
+			"Theta": 0.5235987755982989,
+			"OffsetX": 350,
+			"OffsetY": 140,
+			"R": 350
+		},
+		{
+			"ResizeW": 500,
+			"ResizeH": 0,
+			"PutX": 450,
+			"PutY": 100,
+			"Alpha": 0.4487989505128276, 
+			"Theta": 0.5235987755982989,
+			"OffsetX": 50,
+			"OffsetY": 50,
+			"R": 350
+		}
+	]
+}

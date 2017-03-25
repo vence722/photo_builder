@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"photo_builder/model/template"
 	"photo_builder/service"
 
 	"github.com/astaxie/beego"
@@ -12,15 +13,15 @@ type ProcessController struct {
 }
 
 func (this *ProcessController) Post() {
-	tempId := this.GetString("tempId")
-	var template service.Template
-	if tempId == "1" {
-		template = service.TEMPLATE_BLOCK
+	tmplID := this.GetString("tmplID")
+	var tmpl template.Template
+	if tmplID == "1" {
+		tmpl = template.BlockTemplate
 	} else {
-		template = service.TEMPLATE_PIZZA
+		tmpl = template.PizzaTemplate
 	}
-	batch := service.PHOTO_STORE.GetNextBatch()
-	photo, err := service.PHOTO_PROCESSOR.Process(batch, template)
+	batch := service.PhotoStore.GetNextBatch()
+	photo, err := service.PhotoProcessor.Process(batch, tmpl)
 	if err != nil {
 		fmt.Println(err)
 		return

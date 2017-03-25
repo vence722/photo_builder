@@ -9,15 +9,15 @@ import (
 	"photo_builder/model"
 )
 
-type PhotoStore struct {
+type photoStore struct {
 	rootPath string
 }
 
-func NewPhotoStore(rootPath string) *PhotoStore {
-	return &PhotoStore{rootPath: rootPath}
+func newPhotoStore(rootPath string) *photoStore {
+	return &photoStore{rootPath: rootPath}
 }
 
-func (this *PhotoStore) Cameras() []string {
+func (this *photoStore) Cameras() []string {
 	var cameras []string
 	fileInfos, err := ioutil.ReadDir(this.rootPath)
 	if err != nil {
@@ -32,11 +32,11 @@ func (this *PhotoStore) Cameras() []string {
 	return cameras
 }
 
-func (this *PhotoStore) GetPhotos(cameraId string) []*model.Photo {
+func (this *photoStore) GetPhotos(cameraId string) []*model.Photo {
 	return this.GetPhotosWithNum(cameraId, -1)
 }
 
-func (this *PhotoStore) GetPhotosWithNum(cameraId string, numOfPhotos int) []*model.Photo {
+func (this *photoStore) GetPhotosWithNum(cameraId string, numOfPhotos int) []*model.Photo {
 	var photos []*model.Photo
 	fileInfos, err := ioutil.ReadDir(this.rootPath + string(os.PathSeparator) + cameraId)
 	if err != nil {
@@ -71,7 +71,7 @@ func (this *PhotoStore) GetPhotosWithNum(cameraId string, numOfPhotos int) []*mo
 	return photos
 }
 
-func (this *PhotoStore) GetNextBatch() []*model.Photo {
+func (this *photoStore) GetNextBatch() []*model.Photo {
 	var photos []*model.Photo
 	cameras := this.Cameras()
 	for _, camera := range cameras {
