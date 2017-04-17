@@ -1,0 +1,38 @@
+{
+	"Base": {
+		"ResizeW": 1000,
+		"ResizeH": 0
+	},
+	"Blocks": [
+		{
+			"ResizeW": 250,
+			"ResizeH": 0,
+			"PutX": 150,
+			"PutY": 50
+		},
+		{
+			"ResizeW": 250,
+			"ResizeH": 0,
+			"PutX": 550,
+			"PutY": 100
+		},
+		{
+			"ResizeW": 250,
+			"ResizeH": 0,
+			"PutX": 350,
+			"PutY": 130
+		},
+		{
+			"ResizeW": 250,
+			"ResizeH": 0,
+			"PutX": 450,
+			"PutY": 20
+		},
+		{
+			"ResizeW": 250,
+			"ResizeH": 0,
+			"PutX": 320,
+			"PutY": 170
+		}
+	]
+}

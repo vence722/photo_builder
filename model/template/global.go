@@ -1,14 +1,23 @@
 package template
 
-var BlockTemplate Template
+var BlockTemplate1 Template
+var BlockTemplate2 Template
 var PizzaTemplate Template
+var GalleryTemplate Template
 
 func init() {
-	// init block template
-	BlockTemplate = newBlockTemplate()
-	BlockTemplate.LoadFromJSONFile("./conf/template/block.json")
+	// init block templates
+	BlockTemplate1 = newBlockTemplate()
+	loadFromJSONFile(BlockTemplate1, "./conf/template/block1.json")
+
+	BlockTemplate2 = newBlockTemplate()
+	loadFromJSONFile(BlockTemplate2, "./conf/template/block2.json")
 
 	// init pizza template
 	PizzaTemplate = newPizzaTemplate()
-	PizzaTemplate.LoadFromJSONFile("./conf/template/pizza.json")
+	loadFromJSONFile(PizzaTemplate, "./conf/template/pizza.json")
+
+	// init gallery template
+	GalleryTemplate = newGalleryTemplate()
+	loadFromJSONFile(GalleryTemplate, "./conf/template/gallery.json")
 }

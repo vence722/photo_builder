@@ -6,6 +6,9 @@
 	<!-- jQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 	
+	<!-- Lodash -->
+	<script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
+
 	<!-- bootstrap -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
@@ -25,6 +28,8 @@
 	</style>
 	
 	<script type="text/javascript">
+		var selected = [];
+
 		$(function () {
 			var cameras = $(".camera_name");
 			for (var i=0;i<cameras.size();i++) {
@@ -37,34 +42,81 @@
 			$.post("/", {cameraId: cid}, function(resp) {
 				for (var j=0;j<resp.length;j++) {
 					var photo = resp[j];
-					var img_elem = $("<img src=\"data:image/jpeg;base64," + photo.DataBase64 + "\" style=\"max-height:200px\"/>");
+					var img_elem = $("<img cid=\"" + cid + "\" filename=\"" + photo.FileName + "\" src=\"data:image/jpeg;base64," 
+						+ photo.DataBase64 + "\" style=\"width:100%;max-height:100px;\" onclick=\"choosePhoto('"+ cid + "', '" + photo.FileName + "')\"/>");
 					$("#photo_list_" + cid).append(img_elem);
+					if (j === 0) {
+						choosePhoto(cid, photo.FileName);
+					}
 				}
 			});
 		}
+
+		function choosePhoto(cid, filename) {
+			for (var i in selected) {
+				if (selected[i].cid === cid) {
+					var sel = selected[i];
+					$("img[cid='" + sel.cid +  "'][filename='" + sel.filename + "']").css("border", "none");
+					delete selected[i];
+					if (sel.filename === filename) {
+						return;
+					}
+					break;
+				}
+			}
+			selected.push({cid, filename});
+			$("img[cid='" + cid +  "'][filename='" + filename + "']").css("border", "5px solid red");
+		}
 		
 		function template1() {
+			if (!validateChoose()) {
+				return;
+			}
+			$("#result_div").html("");
 			$("#loadingModal").modal("show");
 			waitingDialog.show();
-			$.post("/proess", {tmplID: "1"}, function (resp) {
-				var photo = resp;
+			$.post("/proess", {tmplID: "1", "selected": JSON.stringify(_.compact(selected))}, function (resp) {
+				var photos = resp;
+				var photo = resp[1];
 				var img_elem = $("<img src=\"data:image/jpeg;base64," + photo.DataBase64 + "\" style=\"max-height:500px\"/>");
-				$("#result_div").html(img_elem);
+				$("#result_div").append(img_elem);
+				$("#result_div").append("<br/><br/>");
+				photo = resp[0];
+				img_elem = $("<img src=\"data:image/jpeg;base64," + photo.DataBase64 + "\" style=\"max-height:500px\"/>");
+				$("#result_div").append(img_elem);
 				$("#loadingModal").modal("hide");
 				waitingDialog.hide();
 			});
 		}
 		
 		function template2() {
+			if (!validateChoose()) {
+				return;
+			}
+			$("#result_div").html("");
 			$("#loadingModal").modal("show");
 			waitingDialog.show();
-			$.post("/proess", {tmplID: "2"}, function (resp) {
+			$.post("/proess", {tmplID: "2", "selected": JSON.stringify(_.compact(selected))}, function (resp) {
 				var photo = resp;
+				var photo = resp[1];
 				var img_elem = $("<img src=\"data:image/jpeg;base64," + photo.DataBase64 + "\" style=\"max-height:500px\"/>");
-				$("#result_div").html(img_elem);
+				$("#result_div").append(img_elem);
+				$("#result_div").append("<br/><br/>");
+				photo = resp[0];
+				img_elem = $("<img src=\"data:image/jpeg;base64," + photo.DataBase64 + "\" style=\"max-height:500px\"/>");
+				$("#result_div").append(img_elem);
 				$("#loadingModal").modal("hide");
 				waitingDialog.hide();
 			});
+		}
+
+		function validateChoose() {
+			var cameras = $(".camera_name");
+			if (_.compact(selected).length < cameras.size()) {
+				$("#dialog").modal();
+				return false;
+			}
+			return true;
 		}
 	</script>
 </head>
@@ -72,9 +124,25 @@
 <body>
 	<div class="modal hide" id="loadingModal">
 	</div>
+	<div class="modal fade" id="dialog" role="dialog">
+		<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">Tips</h4>
+			</div>
+			<div class="modal-body">
+			<p>Please choose at least 1 photo for each camera!</p>
+			</div>
+			<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+		</div>
+	</div>
 	{{with .Cameras}}
 		{{range .}}
-			<div style="width:360px;float:left;border:1px solid black;text-align:center">
+			<div style="width:16%;float:left;border:1px solid black;text-align:center">
 				<div class="camera_name">{{.}}</div>
 				<div id="photo_list_{{.}}" class="photo_list"></div>
 			</div>

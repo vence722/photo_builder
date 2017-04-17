@@ -32,13 +32,13 @@ func (this *photoStore) Cameras() []string {
 	return cameras
 }
 
-func (this *photoStore) GetPhotos(cameraId string) []*model.Photo {
-	return this.GetPhotosWithNum(cameraId, -1)
+func (this *photoStore) GetPhotos(cameraID string) []*model.Photo {
+	return this.GetPhotosWithNum(cameraID, -1)
 }
 
-func (this *photoStore) GetPhotosWithNum(cameraId string, numOfPhotos int) []*model.Photo {
+func (this *photoStore) GetPhotosWithNum(cameraID string, numOfPhotos int) []*model.Photo {
 	var photos []*model.Photo
-	fileInfos, err := ioutil.ReadDir(this.rootPath + string(os.PathSeparator) + cameraId)
+	fileInfos, err := ioutil.ReadDir(this.rootPath + string(os.PathSeparator) + cameraID)
 	if err != nil {
 		fmt.Println(err)
 		return photos
@@ -52,7 +52,7 @@ func (this *photoStore) GetPhotosWithNum(cameraId string, numOfPhotos int) []*mo
 			photo := &model.Photo{
 				FileName: fileInfo.Name(),
 			}
-			path, err := filepath.Abs(this.rootPath + string(os.PathSeparator) + cameraId + string(os.PathSeparator) + fileInfo.Name())
+			path, err := filepath.Abs(this.rootPath + string(os.PathSeparator) + cameraID + string(os.PathSeparator) + fileInfo.Name())
 			if err != nil {
 				fmt.Println(err)
 				continue
@@ -77,6 +77,38 @@ func (this *photoStore) GetNextBatch() []*model.Photo {
 	for _, camera := range cameras {
 		photoSigle := this.GetPhotosWithNum(camera, 1)
 		photos = append(photos, photoSigle...)
+	}
+	return photos
+}
+
+func (this *photoStore) GetSelectedBatch(photoSelects []*model.PhotoSelect) []*model.Photo {
+	var photos []*model.Photo
+	cameras := this.Cameras()
+	for _, camera := range cameras {
+		cameraPhotos := this.GetPhotos(camera)
+		var photoSelect *model.PhotoSelect
+		for _, sel := range photoSelects {
+			if sel.Cid == camera {
+				photoSelect = sel
+				break
+			}
+		}
+		if photoSelect == nil {
+			fmt.Println("error: should select 1 photo of each camera")
+			return nil
+		}
+		var resultPhoto *model.Photo
+		for _, photo := range cameraPhotos {
+			if photo.FileName == photoSelect.Filename {
+				resultPhoto = photo
+				break
+			}
+		}
+		if resultPhoto == nil {
+			fmt.Println("error: should select 1 photo of each camera")
+			return nil
+		}
+		photos = append(photos, resultPhoto)
 	}
 	return photos
 }

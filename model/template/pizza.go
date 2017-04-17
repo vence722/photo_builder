@@ -1,11 +1,8 @@
 package template
 
 import (
-	"encoding/json"
 	"errors"
 	"image/draw"
-	"io/ioutil"
-	"os"
 	"photo_builder/model/filter"
 	"photo_builder/util"
 )
@@ -55,31 +52,4 @@ func (this *pizzaTemplate) ProcessPhoto(photos []draw.Image) (draw.Image, error)
 		}
 	}
 	return base, nil
-}
-
-func (this *pizzaTemplate) SaveToJSONFile(filename string) error {
-	f, err := os.Create(filename)
-	defer f.Close()
-	if err != nil {
-		return err
-	}
-	enc := json.NewEncoder(f)
-	enc.SetIndent("", "	")
-	err = enc.Encode(this)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (this *pizzaTemplate) LoadFromJSONFile(filename string) error {
-	data, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return err
-	}
-	err = json.Unmarshal(data, this)
-	if err != nil {
-		return err
-	}
-	return nil
 }

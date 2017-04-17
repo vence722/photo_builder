@@ -1,11 +1,8 @@
 package template
 
 import (
-	"encoding/json"
 	"errors"
 	"image/draw"
-	"io/ioutil"
-	"os"
 	"photo_builder/model/filter"
 	"photo_builder/util"
 )
@@ -48,31 +45,4 @@ func (this *blockTemplate) ProcessPhoto(photos []draw.Image) (draw.Image, error)
 		}
 	}
 	return base, nil
-}
-
-func (this *blockTemplate) SaveToJSONFile(filename string) error {
-	f, err := os.Create(filename)
-	defer f.Close()
-	if err != nil {
-		return err
-	}
-	enc := json.NewEncoder(f)
-	enc.SetIndent("", "	")
-	err = enc.Encode(this)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (this *blockTemplate) LoadFromJSONFile(filename string) error {
-	data, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return err
-	}
-	err = json.Unmarshal(data, this)
-	if err != nil {
-		return err
-	}
-	return nil
 }

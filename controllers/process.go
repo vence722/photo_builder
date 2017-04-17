@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
+	"photo_builder/model"
 	"photo_builder/model/template"
 	"photo_builder/service"
 
@@ -14,18 +16,34 @@ type ProcessController struct {
 
 func (this *ProcessController) Post() {
 	tmplID := this.GetString("tmplID")
+	selected := this.GetString("selected")
 	var tmpl template.Template
 	if tmplID == "1" {
-		tmpl = template.BlockTemplate
+		tmpl = template.BlockTemplate1
 	} else {
-		tmpl = template.PizzaTemplate
+		tmpl = template.BlockTemplate2
 	}
-	batch := service.PhotoStore.GetNextBatch()
-	photo, err := service.PhotoProcessor.Process(batch, tmpl)
-	if err != nil {
-		fmt.Println(err)
+	photoSels := parsePhotoSelects(selected)
+	batch := service.PhotoStore.GetSelectedBatch(photoSels)
+	photo1, err1 := service.PhotoProcessor.Process(batch, tmpl)
+	if err1 != nil {
+		fmt.Println(err1)
 		return
 	}
-	this.Data["json"] = photo
+	photo2, err2 := service.PhotoProcessor.Process(batch, template.GalleryTemplate)
+	if err2 != nil {
+		fmt.Println(err2)
+		return
+	}
+	this.Data["json"] = []*model.Photo{photo1, photo2}
 	this.ServeJSON()
+}
+
+func parsePhotoSelects(selected string) []*model.PhotoSelect {
+	var photoSelects []*model.PhotoSelect
+	err := json.Unmarshal([]byte(selected), &photoSelects)
+	if err != nil {
+		fmt.Println("failed to decode json at parsePhotoSelects(), input:", selected)
+	}
+	return photoSelects
 }
