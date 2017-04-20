@@ -5,9 +5,14 @@ import (
 	"encoding/base64"
 	"image/draw"
 	"image/jpeg"
+	"io/ioutil"
+	"os"
 	"photo_builder/model"
 	"photo_builder/model/template"
 	"photo_builder/util"
+	"time"
+
+	"github.com/vence722/convert"
 )
 
 type photoProcessor struct {
@@ -42,6 +47,14 @@ func (this *photoProcessor) Process(photoBatch []*model.Photo, tmpl template.Tem
 	result := &model.Photo{}
 	result.FileName = "target.jpg"
 	result.DataBase64 = base64.RawStdEncoding.EncodeToString(buf.Bytes())
+
+	// write to target folder
+	var key = convert.Int2Str(time.Now().UnixNano())
+	var targetFilePath = TargetPath + string(os.PathSeparator) + "target_" + key + ".jpg"
+	_, err = os.Create(targetFilePath)
+	if err == nil {
+		ioutil.WriteFile(targetFilePath, buf.Bytes(), 0666)
+	}
 
 	return result, nil
 }
