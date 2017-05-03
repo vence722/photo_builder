@@ -43,7 +43,7 @@
 				for (var j=0;j<resp.length;j++) {
 					var photo = resp[j];
 					var img_elem = $("<img cid=\"" + cid + "\" filename=\"" + photo.FileName + "\" src=\"data:image/jpeg;base64," 
-						+ photo.DataBase64 + "\" style=\"width:100%;max-height:100px;\" onclick=\"choosePhoto('"+ cid + "', '" + photo.FileName + "')\"/>");
+						+ photo.DataBase64 + "\" style=\"max-width:240px;max-height:200px;\" onclick=\"choosePhoto('"+ cid + "', '" + photo.FileName + "')\"/>");
 					$("#photo_list_" + cid).append(img_elem);
 					if (j === 0) {
 						choosePhoto(cid, photo.FileName);
@@ -78,11 +78,11 @@
 			$.post("/proess", {tmplID: "1", "selected": JSON.stringify(_.compact(selected))}, function (resp) {
 				var photos = resp;
 				var photo = resp[1];
-				var img_elem = $("<img src=\"data:image/jpeg;base64," + photo.DataBase64 + "\" style=\"max-height:500px\"/>");
+				var img_elem = $("<img src=\"data:image/jpeg;base64," + photo.DataBase64 + "\" style=\"max-width:1500px\"/>");
 				$("#result_div").append(img_elem);
 				$("#result_div").append("<br/><br/>");
 				photo = resp[0];
-				img_elem = $("<img src=\"data:image/jpeg;base64," + photo.DataBase64 + "\" style=\"max-height:500px\"/>");
+				img_elem = $("<img src=\"data:image/jpeg;base64," + photo.DataBase64 + "\" style=\"max-width:1500px\"/>");
 				$("#result_div").append(img_elem);
 				$("#loadingModal").modal("hide");
 				waitingDialog.hide();
@@ -151,5 +151,5 @@
 	<br/>
 	<input type="button" class="btn btn-success" style="width:48%" value="Template1" onclick="template1()"/>
 	<input type="button" class="btn btn-danger" style="width:48%" value="Template2" onclick="template2()"/>
-	<div id="result_div" style="margin-top:50px; text-align: center;"></div>
+	<div id="result_div" style="margin-top:50px;"></div>
 </body>
