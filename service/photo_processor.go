@@ -6,10 +6,7 @@ import (
 	"image/draw"
 	"image/jpeg"
 	"io/ioutil"
-<<<<<<< HEAD
 	"os"
-=======
->>>>>>> master
 	"photo_builder/model"
 	"photo_builder/model/template"
 	"photo_builder/util"
