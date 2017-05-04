@@ -6,7 +6,10 @@ import (
 	"image/draw"
 	"image/jpeg"
 	"io/ioutil"
+<<<<<<< HEAD
 	"os"
+=======
+>>>>>>> master
 	"photo_builder/model"
 	"photo_builder/model/template"
 	"photo_builder/util"
@@ -30,7 +33,7 @@ func (this *photoProcessor) Process(photoBatch []*model.Photo, tmpl template.Tem
 		if err != nil {
 			return nil, err
 		}
-		img, err := jpeg.Decode(bytes.NewReader(data))
+		img, err := util.DecodeAndHandleRotation(data)
 		if err != nil {
 			return nil, err
 		}
@@ -43,6 +46,9 @@ func (this *photoProcessor) Process(photoBatch []*model.Photo, tmpl template.Tem
 	}
 	buf := bytes.NewBuffer([]byte{})
 	jpeg.Encode(buf, target, &jpeg.Options{Quality: 100})
+
+	targetPath := "./target/" + convert.Int2String(time.Now().Unix()) + ".jpg"
+	ioutil.WriteFile(targetPath, buf.Bytes(), 0666)
 
 	result := &model.Photo{}
 	result.FileName = "target.jpg"

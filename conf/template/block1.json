@@ -1,38 +1,44 @@
 {
 	"Base": {
-		"ResizeW": 1000,
-		"ResizeH": 0
+		"ResizeW": 2500,
+		"ResizeH": 3000
 	},
 	"Blocks": [
 		{
-			"ResizeW": 250,
-			"ResizeH": 0,
-			"PutX": 150,
-			"PutY": 50
-		},
-		{
-			"ResizeW": 250,
-			"ResizeH": 0,
-			"PutX": 550,
-			"PutY": 100
-		},
-		{
-			"ResizeW": 250,
-			"ResizeH": 0,
-			"PutX": 350,
-			"PutY": 130
-		},
-		{
-			"ResizeW": 250,
+			"ResizeW": 500,
 			"ResizeH": 0,
 			"PutX": 450,
-			"PutY": 20
+			"PutY": 200
 		},
 		{
-			"ResizeW": 250,
+			"ResizeW": 1000,
+			"ResizeH": 1600,
+			"PutX": 750,
+			"PutY": 450
+		},
+		{
+			"ResizeW": 800,
 			"ResizeH": 0,
-			"PutX": 320,
-			"PutY": 170
+			"PutX": 1550,
+			"PutY": 1000
+		},
+		{
+			"ResizeW": 800,
+			"ResizeH": 0,
+			"PutX": 1550,
+			"PutY": 1750
+		},
+		{
+			"ResizeW": 800,
+			"ResizeH": 0,
+			"PutX": 250,
+			"PutY": 2000
+		},
+		{
+			"ResizeW": 800,
+			"ResizeH": 0,
+			"PutX": 1450,
+			"PutY": 250
 		}
 	]
 }

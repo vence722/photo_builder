@@ -32,8 +32,7 @@ func (this *blockTemplate) ProcessPhoto(photos []draw.Image) (draw.Image, error)
 	if len(photos) < 1 {
 		return nil, errors.New("at least 1 photos needed")
 	}
-	base := util.Resize(photos[0], this.Base.ResizeW, this.Base.ResizeH)
-	photos = photos[1:]
+	base := util.WhiteBackground(this.Base.ResizeW, this.Base.ResizeH)
 	for i, photo := range photos {
 		if i < len(this.Blocks) {
 			photos[i] = util.Resize(photo, this.Blocks[i].ResizeW, this.Blocks[i].ResizeH)
