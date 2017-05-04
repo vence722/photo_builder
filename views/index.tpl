@@ -29,6 +29,7 @@
 	
 	<script type="text/javascript">
 		var selected = [];
+		var initCount = 0;
 
 		$(function () {
 			var cameras = $(".camera_name");
@@ -45,27 +46,30 @@
 					var img_elem = $("<img cid=\"" + cid + "\" filename=\"" + photo.FileName + "\" src=\"data:image/jpeg;base64," 
 						+ photo.DataBase64 + "\" style=\"max-width:240px;max-height:200px;\" onclick=\"choosePhoto('"+ cid + "', '" + photo.FileName + "')\"/>");
 					$("#photo_list_" + cid).append(img_elem);
-					if (j === 0) {
-						choosePhoto(cid, photo.FileName);
-					}
+				}
+				if (++initCount === $(".camera_name").size()) {
+					choosePhoto(0);
 				}
 			});
 		}
 
-		function choosePhoto(cid, filename) {
+		function choosePhoto(index) {
 			for (var i in selected) {
-				if (selected[i].cid === cid) {
-					var sel = selected[i];
-					$("img[cid='" + sel.cid +  "'][filename='" + sel.filename + "']").css("border", "none");
-					delete selected[i];
-					if (sel.filename === filename) {
-						return;
-					}
-					break;
+				var sel = selected[i];
+				$("img[cid='" + sel.cid +  "'][filename='" + sel.filename + "']").css("border", "none");
+			}
+			selected = [];
+			var cameras = $(".camera_name");
+			for (var i=0;i<cameras.size();i++) {
+				var cameraId = cameras.eq(i).text();
+				var imgs = $("#photo_list_" + cameraId + " > img");
+				var cid = imgs.eq(index).attr("cid");
+				var filename = imgs.eq(index).attr("filename");
+				if (cid && filename) {
+					selected.push({cid, filename});
+					imgs.eq(index).css("border", "5px solid red");
 				}
 			}
-			selected.push({cid, filename});
-			$("img[cid='" + cid +  "'][filename='" + filename + "']").css("border", "5px solid red");
 		}
 		
 		function template1() {

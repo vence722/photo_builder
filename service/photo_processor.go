@@ -6,6 +6,7 @@ import (
 	"image/draw"
 	"image/jpeg"
 	"io/ioutil"
+	"os"
 	"photo_builder/model"
 	"photo_builder/model/template"
 	"photo_builder/util"
@@ -43,12 +44,20 @@ func (this *photoProcessor) Process(photoBatch []*model.Photo, tmpl template.Tem
 	buf := bytes.NewBuffer([]byte{})
 	jpeg.Encode(buf, target, &jpeg.Options{Quality: 100})
 
-	targetPath := "./target/" + convert.Int2String(time.Now().Unix()) + ".jpg"
+	targetPath := "./target/" + convert.Int2Str(time.Now().Unix()) + ".jpg"
 	ioutil.WriteFile(targetPath, buf.Bytes(), 0666)
 
 	result := &model.Photo{}
 	result.FileName = "target.jpg"
 	result.DataBase64 = base64.RawStdEncoding.EncodeToString(buf.Bytes())
+
+	// write to target folder
+	var key = convert.Int2Str(time.Now().UnixNano())
+	var targetFilePath = TargetPath + string(os.PathSeparator) + "target_" + key + ".jpg"
+	_, err = os.Create(targetFilePath)
+	if err == nil {
+		ioutil.WriteFile(targetFilePath, buf.Bytes(), 0666)
+	}
 
 	return result, nil
 }
