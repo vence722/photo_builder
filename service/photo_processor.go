@@ -44,7 +44,7 @@ func (this *photoProcessor) Process(photoBatch []*model.Photo, tmpl template.Tem
 	buf := bytes.NewBuffer([]byte{})
 	jpeg.Encode(buf, target, &jpeg.Options{Quality: 100})
 
-	targetPath := "./target/" + convert.Int2String(time.Now().Unix()) + ".jpg"
+	targetPath := "./target/" + convert.Int2Str(time.Now().Unix()) + ".jpg"
 	ioutil.WriteFile(targetPath, buf.Bytes(), 0666)
 
 	result := &model.Photo{}
