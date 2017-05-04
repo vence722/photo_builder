@@ -44,11 +44,7 @@
 				for (var j=0;j<resp.length;j++) {
 					var photo = resp[j];
 					var img_elem = $("<img cid=\"" + cid + "\" filename=\"" + photo.FileName + "\" src=\"data:image/jpeg;base64," 
-<<<<<<< HEAD
-						+ photo.DataBase64 + "\" style=\"width:100%;max-height:100px;\" onclick=\"choosePhoto(" + j + ")\"/>");
-=======
 						+ photo.DataBase64 + "\" style=\"max-width:240px;max-height:200px;\" onclick=\"choosePhoto('"+ cid + "', '" + photo.FileName + "')\"/>");
->>>>>>> master
 					$("#photo_list_" + cid).append(img_elem);
 				}
 				if (++initCount === $(".camera_name").size()) {
