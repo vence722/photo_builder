@@ -23,7 +23,7 @@
 		}
 		
 		.photo_list {
-			min-height: 200px
+			min-height: 150px
 		}
 	</style>
 	
@@ -44,7 +44,7 @@
 				for (var j=0;j<resp.length;j++) {
 					var photo = resp[j];
 					var img_elem = $("<img cid=\"" + cid + "\" filename=\"" + photo.FileName + "\" src=\"data:image/jpeg;base64," 
-						+ photo.DataBase64 + "\" style=\"max-width:240px;max-height:200px;\" onclick=\"choosePhoto('"+ cid + "', '" + photo.FileName + "')\"/>");
+						+ photo.DataBase64 + "\" style=\"max-width:100%;max-height:100%\" onclick=\"choosePhoto('"+ cid + "', '" + photo.FileName + "')\"/>");
 					$("#photo_list_" + cid).append(img_elem);
 				}
 				if (++initCount === $(".camera_name").size()) {
