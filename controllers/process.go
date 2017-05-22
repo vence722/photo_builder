@@ -10,6 +10,8 @@ import (
 	"github.com/astaxie/beego"
 )
 
+var IsMoveArchive = beego.AppConfig.String("options::movearchive")
+
 type ProcessController struct {
 	beego.Controller
 }
@@ -37,7 +39,9 @@ func (this *ProcessController) Post() {
 	}
 	this.Data["json"] = []*model.Photo{photo1, photo2}
 	// move files to archive
-	service.PhotoStore.MoveAllToArchive()
+	if IsMoveArchive == "true" {
+		service.PhotoStore.MoveAllToArchive()
+	}
 	this.ServeJSON()
 }
 
