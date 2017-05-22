@@ -1,6 +1,7 @@
 package template
 
 import (
+	"errors"
 	"image"
 	"image/draw"
 	"photo_builder/model/filter"
@@ -8,17 +9,25 @@ import (
 )
 
 type galleryTmplate struct {
-	NumX    int
-	NumY    int
-	ResizeX int
-	ResizeY int
+	ConfigPath string
+	NumX       int
+	NumY       int
+	ResizeX    int
+	ResizeY    int
 }
 
-func newGalleryTemplate() *galleryTmplate {
-	return &galleryTmplate{}
+func newGalleryTemplate(configPath string) *galleryTmplate {
+	return &galleryTmplate{ConfigPath: configPath}
 }
 
 func (this *galleryTmplate) ProcessPhoto(photos []draw.Image) (draw.Image, error) {
+	if len(photos) < 1 {
+		return nil, errors.New("at least 1 photos needed")
+	}
+	err := loadFromJSONFile(this, this.ConfigPath)
+	if err != nil {
+		return nil, errors.New("load config file err: " + err.Error())
+	}
 	rect := image.Rect(0, 0, this.NumX*this.ResizeX, this.NumY*this.ResizeY)
 	base := image.NewRGBA(rect)
 	for j := 0; j < this.NumY; j++ {

@@ -8,8 +8,9 @@ import (
 )
 
 type blockTemplate struct {
-	Base   base
-	Blocks []block
+	ConfigPath string
+	Base       base
+	Blocks     []block
 }
 
 type base struct {
@@ -24,13 +25,17 @@ type block struct {
 	PutY    int
 }
 
-func newBlockTemplate() *blockTemplate {
-	return &blockTemplate{Blocks: []block{}}
+func newBlockTemplate(configPath string) *blockTemplate {
+	return &blockTemplate{ConfigPath: configPath, Blocks: []block{}}
 }
 
 func (this *blockTemplate) ProcessPhoto(photos []draw.Image) (draw.Image, error) {
 	if len(photos) < 1 {
 		return nil, errors.New("at least 1 photos needed")
+	}
+	err := loadFromJSONFile(this, this.ConfigPath)
+	if err != nil {
+		return nil, errors.New("load config file err: " + err.Error())
 	}
 	base := util.WhiteBackground(this.Base.ResizeW, this.Base.ResizeH)
 	for i, photo := range photos {

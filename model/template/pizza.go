@@ -8,6 +8,7 @@ import (
 )
 
 type pizzaTemplate struct {
+	ConfigPath  string
 	Base        plate
 	PizzaPieces []pizzaPiece
 }
@@ -29,15 +30,18 @@ type pizzaPiece struct {
 	R       int
 }
 
-func newPizzaTemplate() *pizzaTemplate {
-	return &pizzaTemplate{PizzaPieces: []pizzaPiece{}}
+func newPizzaTemplate(configPath string) *pizzaTemplate {
+	return &pizzaTemplate{ConfigPath: configPath, PizzaPieces: []pizzaPiece{}}
 }
 
 func (this *pizzaTemplate) ProcessPhoto(photos []draw.Image) (draw.Image, error) {
 	if len(photos) < 1 {
 		return nil, errors.New("at least 1 photos needed")
 	}
-
+	err := loadFromJSONFile(this, this.ConfigPath)
+	if err != nil {
+		return nil, errors.New("load config file err: " + err.Error())
+	}
 	base := util.Resize(photos[0], this.Base.ResizeW, this.Base.ResizeH)
 	photos = photos[1:]
 	for i, photo := range photos {
