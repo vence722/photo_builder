@@ -34,8 +34,7 @@ func (this *photoProcessor) Process(photoBatch []*model.Photo, tmpl template.Tem
 		if err != nil {
 			return nil, err
 		}
-		photo := util.ToDrawableImage(img)
-		photos = append(photos, photo)
+		photos = append(photos, img)
 	}
 	target, err := tmpl.ProcessPhoto(photos)
 	if err != nil {
@@ -44,20 +43,22 @@ func (this *photoProcessor) Process(photoBatch []*model.Photo, tmpl template.Tem
 	buf := bytes.NewBuffer([]byte{})
 	jpeg.Encode(buf, target, &jpeg.Options{Quality: 100})
 
-	targetPath := "./target/" + convert.Int2Str(time.Now().Unix()) + ".jpg"
-	ioutil.WriteFile(targetPath, buf.Bytes(), 0666)
-
 	result := &model.Photo{}
 	result.FileName = "target.jpg"
 	result.DataBase64 = base64.RawStdEncoding.EncodeToString(buf.Bytes())
 
 	// write to target folder
 	var key = convert.Int2Str(time.Now().UnixNano())
+	if _, err := os.Stat(TargetPath); os.IsNotExist(err) {
+		err := os.MkdirAll(TargetPath, 0755)
+		if err != nil {
+			return nil, err
+		}
+	}
 	var targetFilePath = TargetPath + string(os.PathSeparator) + "target_" + key + ".jpg"
 	_, err = os.Create(targetFilePath)
 	if err == nil {
-		ioutil.WriteFile(targetFilePath, buf.Bytes(), 0666)
+		ioutil.WriteFile(targetFilePath, buf.Bytes(), 0644)
 	}
-
 	return result, nil
 }

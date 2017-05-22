@@ -32,15 +32,22 @@
 		var initCount = 0;
 
 		$(function () {
+			loadPhotos();
+		});
+
+		function loadPhotos() {
+			selected = [];
+			initCount = 0;
 			var cameras = $(".camera_name");
 			for (var i=0;i<cameras.size();i++) {
 				var cid = cameras.eq(i).text();
 				getPhotos(cid);
 			}
-		});
+		}
 		
 		function getPhotos(cid) {
 			$.post("/", {cameraId: cid}, function(resp) {
+				$("#photo_list_" + cid).html("");
 				for (var j=0;j<resp.length;j++) {
 					var photo = resp[j];
 					var img_elem = $("<img cid=\"" + cid + "\" filename=\"" + photo.FileName + "\" src=\"data:image/jpeg;base64," 
@@ -90,6 +97,8 @@
 				$("#result_div").append(img_elem);
 				$("#loadingModal").modal("hide");
 				waitingDialog.hide();
+
+				loadPhotos();
 			});
 		}
 		
@@ -111,6 +120,8 @@
 				$("#result_div").append(img_elem);
 				$("#loadingModal").modal("hide");
 				waitingDialog.hide();
+
+				loadPhotos();
 			});
 		}
 

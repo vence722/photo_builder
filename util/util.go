@@ -52,6 +52,10 @@ func DecodeAndHandleRotation(data []byte) (draw.Image, error) {
 	}
 	orientation, err2 := ex1.Get(exif.Orientation)
 	if err2 != nil {
+		if err2.Error() == "exif: tag \"Orientation\" is not present" {
+			// tag "Orientation" is not present
+			return ToDrawableImage(img), nil
+		}
 		return nil, err2
 	}
 	// Should rotate 90 degrees
@@ -71,6 +75,14 @@ func DecodeAndHandleRotation(data []byte) (draw.Image, error) {
 		return target, nil
 	}
 	return ToDrawableImage(img), nil
+}
+
+func Encode(img image.Image) ([]byte, error) {
+	buf := bytes.NewBuffer([]byte{})
+	if err := jpeg.Encode(buf, img, &jpeg.Options{Quality: 100}); err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
 }
 
 func ToDrawableImage(img image.Image) draw.Image {

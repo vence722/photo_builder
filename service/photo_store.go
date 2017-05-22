@@ -10,11 +10,12 @@ import (
 )
 
 type photoStore struct {
-	rootPath string
+	rootPath   string
+	targetPath string
 }
 
-func newPhotoStore(rootPath string) *photoStore {
-	return &photoStore{rootPath: rootPath}
+func newPhotoStore(rootPath string, targetPath string) *photoStore {
+	return &photoStore{rootPath: rootPath, targetPath: targetPath}
 }
 
 func (this *photoStore) Cameras() []string {
@@ -63,6 +64,16 @@ func (this *photoStore) GetPhotosWithNum(cameraID string, numOfPhotos int) []*mo
 				fmt.Println(err)
 				continue
 			}
+			// img, err1 := util.DecodeAndHandleRotation(data)
+			// if err1 != nil {
+			// 	fmt.Println(err1)
+			// 	continue
+			// }
+			// bdata, err2 := util.Encode(img)
+			// if err2 != nil {
+			// 	fmt.Println(err2)
+			// 	continue
+			// }
 			photo.DataBase64 = base64.RawStdEncoding.EncodeToString(data)
 			photos = append(photos, photo)
 			count++
@@ -111,4 +122,31 @@ func (this *photoStore) GetSelectedBatch(photoSelects []*model.PhotoSelect) []*m
 		photos = append(photos, resultPhoto)
 	}
 	return photos
+}
+
+func (this *photoStore) MoveAllToArchive() {
+	cameras := this.Cameras()
+	for _, camera := range cameras {
+		fileInfos, err := ioutil.ReadDir(this.rootPath + string(os.PathSeparator) + camera)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		for _, fileInfo := range fileInfos {
+			origPath := this.rootPath + string(os.PathSeparator) + camera + string(os.PathSeparator) + fileInfo.Name()
+			targetFolder := this.targetPath + string(os.PathSeparator) + "archive" + string(os.PathSeparator) + camera
+			if _, err := os.Stat(targetFolder); os.IsNotExist(err) {
+				err := os.MkdirAll(targetFolder, 0755)
+				if err != nil {
+					fmt.Println(err)
+					return
+				}
+			}
+			targetPath := targetFolder + string(os.PathSeparator) + fileInfo.Name()
+			err := os.Rename(origPath, targetPath)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+	}
 }

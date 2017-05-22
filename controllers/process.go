@@ -36,6 +36,8 @@ func (this *ProcessController) Post() {
 		return
 	}
 	this.Data["json"] = []*model.Photo{photo1, photo2}
+	// move files to archive
+	service.PhotoStore.MoveAllToArchive()
 	this.ServeJSON()
 }
 
