@@ -19,6 +19,10 @@ type base struct {
 }
 
 type block struct {
+	CropX1  int
+	CropY1  int
+	CropX2  int
+	CropY2  int
 	ResizeW int
 	ResizeH int
 	PutX    int
@@ -38,6 +42,11 @@ func (this *blockTemplate) ProcessPhoto(photos []draw.Image) (draw.Image, error)
 		return nil, errors.New("load config file err: " + err.Error())
 	}
 	base := util.WhiteBackground(this.Base.ResizeW, this.Base.ResizeH)
+	for i, photo := range photos {
+		if i < len(this.Blocks) {
+			photos[i] = util.Crop(photo, this.Blocks[i].CropX1, this.Blocks[i].CropY1, this.Blocks[i].CropX2, this.Blocks[i].CropY2)
+		}
+	}
 	for i, photo := range photos {
 		if i < len(this.Blocks) {
 			photos[i] = util.Resize(photo, this.Blocks[i].ResizeW, this.Blocks[i].ResizeH)

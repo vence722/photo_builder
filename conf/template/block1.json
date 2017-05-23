@@ -5,36 +5,60 @@
 	},
 	"Blocks": [
 		{
+			"CropX1": 100,
+			"CropY1": 100,
+			"CropX2": 500,
+			"CropY2": 500,
 			"ResizeW": 500,
 			"ResizeH": 0,
 			"PutX": 450,
 			"PutY": 200
 		},
 		{
+			"CropX1": 150,
+			"CropY1": 150,
+			"CropX2": 400,
+			"CropY2": 500,
 			"ResizeW": 1000,
 			"ResizeH": 1600,
 			"PutX": 750,
 			"PutY": 450
 		},
 		{
+			"CropX1": 0,
+			"CropY1": 0,
+			"CropX2": 0,
+			"CropY2": 0,
 			"ResizeW": 800,
 			"ResizeH": 0,
 			"PutX": 1550,
 			"PutY": 1000
 		},
 		{
+			"CropX1": 0,
+			"CropY1": 0,
+			"CropX2": 0,
+			"CropY2": 0,
 			"ResizeW": 800,
 			"ResizeH": 0,
 			"PutX": 1550,
 			"PutY": 1750
 		},
 		{
+			"CropX1": 0,
+			"CropY1": 0,
+			"CropX2": 0,
+			"CropY2": 0,
 			"ResizeW": 800,
 			"ResizeH": 0,
 			"PutX": 250,
 			"PutY": 2000
 		},
 		{
+			"CropX1": 0,
+			"CropY1": 0,
+			"CropX2": 0,
+			"CropY2": 0,
 			"ResizeW": 800,
 			"ResizeH": 0,
 			"PutX": 1450,

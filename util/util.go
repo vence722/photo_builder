@@ -11,6 +11,7 @@ import (
 
 	"code.google.com/p/graphics-go/graphics"
 	"github.com/nfnt/resize"
+	"github.com/oliamb/cutter"
 	"github.com/rwcarlsen/goexif/exif"
 )
 
@@ -34,6 +35,21 @@ func WriteImage(img draw.Image, path string) error {
 		return err
 	}
 	return jpeg.Encode(tf, img, &jpeg.Options{Quality: jpeg.DefaultQuality})
+}
+
+func Crop(img draw.Image, x1 int, y1 int, x2 int, y2 int) draw.Image {
+	if x1 == 0 && y1 == 0 && x2 == 0 && y2 == 0 {
+		return img
+	}
+	res, err := cutter.Crop(img, cutter.Config{
+		Width:  x2 + x1,
+		Height: y2 + y1,
+		Anchor: image.Point{-x1, -y1},
+	})
+	if err != nil {
+		return img
+	}
+	return ToDrawableImage(res)
 }
 
 func Resize(img draw.Image, width int, height int) draw.Image {
